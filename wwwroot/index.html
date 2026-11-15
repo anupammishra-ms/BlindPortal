@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BlindPortal – speak up, stay unseen</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f4efe4;--card:#fffdf8;--ink:#111;--mute:#5f5a50;--line:#e4dccb;--blue:#0a66c2;--bluebg:#e8f1fb;--crit:#d11a2a;--critbg:#fdeaec;--wa:#25d366}
+*{box-sizing:border-box}
+body{margin:0;font-family:Inter,system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.5;padding-bottom:90px}
+header{position:sticky;top:0;z-index:10;background:var(--card);border-bottom:1px solid var(--line)}
+.bar{max-width:680px;margin:auto;display:flex;align-items:center;gap:12px;padding:10px 16px}
+.logo{display:flex;align-items:center;gap:8px;font-weight:800;font-size:20px;color:var(--ink)}
+.logo i{width:30px;height:30px;border-radius:8px;background:var(--blue);color:#fff;display:grid;place-items:center;font-style:normal;font-size:16px}
+.bar .sp{flex:1}
+.adm{font-weight:600;font-size:13px;color:var(--ink);text-decoration:none;border:1px solid var(--line);padding:7px 12px;border-radius:99px;background:var(--bg);display:flex;gap:6px;align-items:center}
+main{max-width:680px;margin:auto;padding:16px}
+.note{display:flex;gap:10px;align-items:flex-start;background:var(--bluebg);border:1px solid #bcd7f2;border-radius:14px;padding:12px 14px;font-size:14px;margin-bottom:14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;margin-bottom:12px}
+.card.crit{border-color:var(--crit);border-width:2px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:12px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:10px;text-align:center}
+.stat b{display:block;font-size:22px}.stat span{font-size:12px;color:var(--mute)}
+.composer{display:flex;gap:12px;align-items:center;cursor:pointer}
+.fake{flex:1;padding:12px 16px;border-radius:99px;border:1px solid var(--line);color:var(--mute);background:var(--bg)}
+.av{width:42px;height:42px;border-radius:50%;background:#111;color:#fff;display:grid;place-items:center;font-weight:700;flex:none}
+.trend{display:flex;gap:14px;overflow-x:auto;padding:2px 2px 12px;scrollbar-width:none}
+.story{flex:none;width:68px;text-align:center;cursor:pointer;font-size:11px;color:var(--mute)}
+.ring{width:58px;height:58px;border-radius:50%;padding:3px;margin:0 auto 5px;background:var(--blue)}
+.ring.hot{background:var(--crit)}
+.ring i{display:grid;place-items:center;width:100%;height:100%;border-radius:50%;background:var(--card);font-style:normal;font-weight:800;font-size:19px;color:var(--ink)}
+.story span{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tools{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;align-items:center}
+input,select,textarea{width:100%;font:inherit;color:var(--ink);background:#fff;border:1px solid #cfc6b2;border-radius:10px;padding:11px 12px;margin:5px 0 12px;outline:none}
+input:focus,select:focus,textarea:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(10,102,194,.18)}
+.search{flex:1;min-width:170px;margin:0}
+.chip{border:1px solid #cfc6b2;background:#fff;color:var(--ink);font:inherit;font-size:13px;font-weight:600;padding:8px 14px;border-radius:99px;cursor:pointer}
+.chip.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.btn{border:0;font:inherit;font-weight:700;color:#fff;background:var(--blue);padding:11px 20px;border-radius:99px;cursor:pointer}
+.btn.ghost{background:transparent;color:#333;border:0;border-radius:10px;font-weight:600;padding:10px 8px}
+.btn.ghost:hover{background:var(--bg)}
+.btn.w{width:100%}.btn:disabled{opacity:.5}
+.meta{display:flex;gap:12px;align-items:center}.who{flex:1;min-width:0}.who b{display:block}.who small{color:var(--mute);font-size:12.5px}
+.badge{background:var(--critbg);color:var(--crit);font-weight:700;font-size:11px;padding:4px 10px;border-radius:99px;border:1px solid #f3b6bc}
+.txt{margin:12px 0;font-size:15.5px}
+.card img,.card video{width:100%;max-height:440px;object-fit:cover;border-radius:10px;background:#000;display:block}
+.prog{height:6px;border-radius:9px;background:#e9e2d2;margin:14px 0 6px;overflow:hidden}
+.prog div{height:100%;background:var(--blue)}.prog.hot div{background:var(--crit)}
+.cnt{font-size:13px;color:var(--mute)}
+.acts{display:flex;gap:4px;margin-top:10px;border-top:1px solid var(--line);padding-top:8px}.acts button{flex:1}
+.row{display:flex;align-items:center;gap:12px}.rank{font-weight:800;font-size:22px;width:34px;color:var(--blue)}
+.empty{text-align:center;color:var(--mute);padding:40px 12px}.hint{font-size:13px;color:var(--mute)}
+label{font-weight:600;font-size:13px}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}@media(max-width:560px){.grid3{grid-template-columns:1fr}}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}@media(max-width:480px){.grid2{grid-template-columns:1fr}}
+dialog{border:0;border-radius:18px;padding:22px;width:min(440px,94vw);max-height:92vh;background:var(--card);color:var(--ink)}
+dialog::backdrop{background:rgba(30,25,15,.5)}dialog h2{margin:0 0 4px}
+#prev img,#prev video{width:100%;max-height:200px;object-fit:cover;border-radius:10px;margin-bottom:12px}
+nav{position:fixed;bottom:0;left:0;right:0;z-index:20;background:var(--card);border-top:1px solid var(--line);display:flex;justify-content:center}
+nav .in{display:flex;width:min(680px,100%)}
+nav button{flex:1;border:0;background:none;color:var(--mute);font:inherit;font-size:11px;font-weight:600;padding:8px 4px 10px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:1px}
+nav button span{font-size:20px}nav button.on{color:var(--ink);box-shadow:inset 0 3px 0 var(--blue)}
+.wa{position:fixed;right:16px;bottom:80px;z-index:30;width:56px;height:56px;border-radius:50%;background:var(--wa);display:grid;place-items:center;box-shadow:0 6px 18px rgba(0,0,0,.25)}
+.wa svg{width:32px;height:32px;fill:#fff}
+.toast{position:fixed;top:70px;left:50%;transform:translateX(-50%);background:#111;color:#fff;padding:12px 18px;border-radius:12px;display:none;z-index:99;max-width:90vw;font-weight:600}
+:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+</style>
+</head>
+<body>
+<header><div class="bar">
+  <div class="logo"><i>B</i>BlindPortal</div><div class="sp"></div>
+  <a class="adm" href="https://wa.me/918660116350?text=Hi%20BlindPortal%20admin" target="_blank" rel="noopener">💬 Contact admin</a>
+</div></header>
+
+<main>
+  <section id="home">
+    <div class="note"><span>🔒</span><div><b>Post without logging in.</b> Your name, number and identity are never collected or shown. Every post appears as “Anonymous citizen”.</div></div>
+    <div class="stats"><div class="stat"><b id="sP">0</b><span>Problems</span></div><div class="stat"><b id="sR">0</b><span>Reports</span></div><div class="stat"><b id="sC" style="color:var(--crit)">0</b><span>Critical</span></div></div>
+    <div class="card composer" onclick="compose.showModal()"><div class="av">?</div><div class="fake">What’s wrong in your area?</div></div>
+    <div class="trend" id="trend"></div>
+    <div class="tools">
+      <input class="search" id="q" placeholder="Search area, district or state">
+      <button class="chip on" data-c="all">Trending</button><button class="chip" data-c="critical">Critical</button><button class="chip" data-c="new">Latest</button>
+    </div>
+    <div id="feedList"></div>
+  </section>
+
+  <section id="top" hidden><h2>Top areas</h2><p class="hint">Areas with the most critical problems and reports.</p><div id="topList"></div></section>
+
+  <section id="leader" hidden>
+    <h2>Leader view</h2><p class="hint">Pick your area to see every problem reported there, most reported first.</p>
+    <div class="card"><div class="grid3">
+      <div><label>State</label><select id="lState"></select></div>
+      <div><label>District</label><input id="lDistrict" placeholder="e.g. Pune"></div>
+      <div><label>Area (optional)</label><input id="lArea" placeholder="Locality"></div></div>
+      <button class="btn w" id="lGo">Show problems</button></div>
+    <div id="leaderList"></div>
+  </section>
+</main>
+
+<a class="wa" href="https://wa.me/918660116350?text=Hi%20BlindPortal%20admin" target="_blank" rel="noopener" aria-label="Chat with admin on WhatsApp">
+  <svg viewBox="0 0 32 32"><path d="M16 3C8.8 3 3 8.8 3 16c0 2.3.6 4.5 1.7 6.4L3 29l6.8-1.8A13 13 0 0 0 16 29c7.2 0 13-5.8 13-13S23.2 3 16 3zm0 23.7c-2 0-3.9-.5-5.5-1.5l-.4-.2-4 1 1.1-3.9-.3-.4A10.7 10.7 0 1 1 16 26.7zm5.9-8c-.3-.2-1.9-.9-2.2-1s-.5-.2-.7.2-.8 1-1 1.2-.4.2-.7.1a8.7 8.7 0 0 1-4.3-3.8c-.3-.6.3-.5.9-1.7.1-.2 0-.4 0-.5l-1-2.3c-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4s-1 1-1 2.5 1.1 2.9 1.2 3.1c.2.2 2.100 3.300 5.200 4.600 1.900.8 2.700.9 3.600.7.600-.1 1.900-.8 2.200-1.500s.3-1.400.2-1.500-.3-.2-.6-.4z"/></svg>
+</a>
+
+<nav><div class="in">
+  <button data-t="home" class="on"><span>🏠</span>Home</button>
+  <button data-t="top"><span>🏆</span>Top areas</button>
+  <button onclick="compose.showModal()"><span>➕</span>Report</button>
+  <button data-t="leader"><span>📍</span>Leader view</button>
+</div></nav>
+
+<dialog id="compose">
+  <h2>Report a problem</h2>
+  <p class="hint">No login needed. Posted as <b>Anonymous</b>. Nobody can see who you are.</p>
+  <div class="grid2"><div><label>State</label><select id="rState"></select></div><div><label>District</label><input id="rDistrict" placeholder="e.g. Pune"></div></div>
+  <label>Area</label><input id="rArea" placeholder="Locality, ward or landmark">
+  <label>What’s wrong?</label><textarea id="rDesc" rows="4" placeholder="Describe the issue in a few lines"></textarea>
+  <label>Photo or video (optional)</label><input id="rFile" type="file" accept="image/*,video/*"><div id="prev"></div>
+  <button class="btn w" id="postBtn">Post anonymously</button>
+  <button class="btn ghost w" style="margin-top:6px" onclick="compose.close()">Cancel</button>
+</dialog>
+<div class="toast" id="toast"></div>
+
+<script>
+const $=s=>document.querySelector(s);
+if(!localStorage.bp_dev)localStorage.bp_dev=(crypto.randomUUID?crypto.randomUUID():String(Math.random()).slice(2)+Date.now());
+const api=(u,o={})=>fetch(u,{...o,headers:{...(o.headers||{}),'X-Device':localStorage.bp_dev}}).then(async r=>{const j=await r.json().catch(()=>({}));if(!r.ok)throw new Error(j.error||'Something went wrong.');return j});
+const states=["Andhra Pradesh","Arunachal Pradesh","Assam","Bihar","Chhattisgarh","Goa","Gujarat","Haryana","Himachal Pradesh","Jharkhand","Karnataka","Kerala","Madhya Pradesh","Maharashtra","Manipur","Meghalaya","Mizoram","Nagaland","Odisha","Punjab","Rajasthan","Sikkim","Tamil Nadu","Telangana","Tripura","Uttar Pradesh","Uttarakhand","West Bengal","Delhi","Jammu and Kashmir","Ladakh","Puducherry","Chandigarh"];
+const opts=states.map(s=>`<option>${s}</option>`).join('');$('#rState').innerHTML=opts;$('#lState').innerHTML=opts;
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function toast(m){const t=$('#toast');t.textContent=m;t.style.display='block';setTimeout(()=>t.style.display='none',3200)}
+function ago(d){const m=(Date.now()-new Date(d))/6e4;return m<1?'just now':m<60?Math.floor(m)+'m ago':m<1440?Math.floor(m/60)+'h ago':Math.floor(m/1440)+'d ago'}
+
+let items=[],chip='all',q='';const NEED=11;
+function card(i){
+  const media=i.mediaUrl?(i.mediaType==='video'?`<video src="${i.mediaUrl}" controls preload="metadata"></video>`:`<img src="${i.mediaUrl}" alt="Issue photo" loading="lazy">`):'';
+  const pct=Math.min(100,Math.round(i.count/NEED*100));
+  return `<article class="card ${i.critical?'crit':''}">
+   <div class="meta"><div class="av">?</div><div class="who"><b>Anonymous citizen</b><small>📍 ${esc(i.area)}, ${esc(i.district)}, ${esc(i.state)} · ${ago(i.createdAt)}</small></div>${i.critical?'<span class="badge">CRITICAL</span>':''}</div>
+   <p class="txt">${esc(i.description)}</p>${media}
+   <div class="prog ${i.critical?'hot':''}"><div style="width:${pct}%"></div></div>
+   <div class="cnt">${i.critical?'🔥 Marked critical · ':''}<b>${i.count}</b> ${i.count==1?'person':'people'} reported${i.critical?'':` · critical at ${NEED}`}</div>
+   <div class="acts"><button class="btn ghost" onclick="meToo('${i.id}')">✊ I face this too</button><button class="btn ghost" onclick="share('${i.id}')">↗ Share</button></div></article>`;
+}
+function render(){
+  let l=items.filter(i=>!q||(i.area+' '+i.district+' '+i.state+' '+i.description).toLowerCase().includes(q));
+  const byNew=(a,b)=>new Date(b.createdAt)-new Date(a.createdAt);
+  if(chip==='critical')l=l.filter(i=>i.critical).sort((a,b)=>b.count-a.count);
+  else if(chip==='new')l.sort(byNew);else l.sort((a,b)=>b.critical-a.critical||b.count-a.count||byNew(a,b));
+  $('#feedList').innerHTML=l.length?l.map(card).join(''):'<div class="empty">Nothing here yet.<br>Be the first to speak up.</div>';
+}
+async function loadFeed(){
+  items=await api('/api/issues');
+  $('#sP').textContent=items.length;$('#sR').textContent=items.reduce((a,i)=>a+i.count,0);$('#sC').textContent=items.filter(i=>i.critical).length;
+  render();loadTrend();
+}
+async function loadTrend(){
+  const l=(await api('/api/leaderboard')).slice(0,10);
+  $('#trend').innerHTML=l.map(x=>`<div class="story" onclick="setQ(this.dataset.a)" data-a="${esc(x.area)}"><div class="ring ${x.critical?'hot':''}"><i>${esc((x.area[0]||'?').toUpperCase())}</i></div><span>${esc(x.area)}</span></div>`).join('');
+}
+function setQ(v){$('#q').value=v;q=v.toLowerCase();render();window.scrollTo({top:300,behavior:'smooth'})}
+$('#q').oninput=e=>{q=e.target.value.toLowerCase();render()};
+document.querySelectorAll('.chip').forEach(b=>b.onclick=()=>{document.querySelectorAll('.chip').forEach(x=>x.classList.remove('on'));b.classList.add('on');chip=b.dataset.c;render()});
+
+async function meToo(id){try{await api(`/api/issues/${id}/me-too`,{method:'POST'});toast('Added to this report');loadFeed();if(!$('#leader').hidden)lGo()}catch(e){toast(e.message)}}
+async function share(id){const i=items.find(x=>x.id===id)||{};const text=`${i.description} — ${i.area}, ${i.district}. ${i.count} people reported this on BlindPortal.`;
+  try{if(navigator.share)await navigator.share({title:'BlindPortal',text,url:location.href});else{await navigator.clipboard.writeText(text+' '+location.href);toast('Copied to clipboard')}}catch{}}
+
+$('#rFile').onchange=e=>{const f=e.target.files[0],p=$('#prev');p.innerHTML='';if(!f)return;const u=URL.createObjectURL(f);p.innerHTML=f.type.startsWith('video')?`<video src="${u}" controls></video>`:`<img src="${u}" alt="Preview">`};
+$('#postBtn').onclick=async()=>{
+  const f=new FormData();f.append('state',$('#rState').value);f.append('district',$('#rDistrict').value);f.append('area',$('#rArea').value);f.append('description',$('#rDesc').value);
+  if($('#rFile').files[0])f.append('file',$('#rFile').files[0]);
+  $('#postBtn').disabled=true;
+  try{const r=await api('/api/issues',{method:'POST',body:f});
+    toast(r.merged?'Similar report found — your vote was added to it.':'Posted anonymously ✔');
+    ['rDistrict','rArea','rDesc','rFile'].forEach(i=>$('#'+i).value='');$('#prev').innerHTML='';compose.close();show('home')}
+  catch(e){toast(e.message)}
+  $('#postBtn').disabled=false};
+
+async function loadTop(){
+  const l=await api('/api/leaderboard');
+  $('#topList').innerHTML=l.length?l.map((x,n)=>`<div class="card row"><span class="rank">${n+1}</span><div style="flex:1"><b>${esc(x.area)}</b><div class="hint">${esc(x.district)}, ${esc(x.state)}</div></div>
+   <div style="text-align:right"><b>${x.reports}</b> <span class="hint">reports</span><br>${x.critical?`<span class="badge">${x.critical} critical</span>`:`<span class="hint">${x.problems} problems</span>`}</div></div>`).join(''):'<div class="empty">No data yet.</div>';
+}
+async function lGo(){
+  const p=new URLSearchParams({state:$('#lState').value,district:$('#lDistrict').value,area:$('#lArea').value});
+  const l=(await api('/api/issues?'+p)).sort((a,b)=>b.count-a.count);
+  $('#leaderList').innerHTML=l.length?l.map(card).join(''):'<div class="empty">No problems reported in this area yet.</div>';
+}
+$('#lGo').onclick=lGo;
+function show(t){document.querySelectorAll('main>section').forEach(s=>s.hidden=s.id!==t);document.querySelectorAll('nav button[data-t]').forEach(b=>b.classList.toggle('on',b.dataset.t===t));
+  if(t==='home')loadFeed();if(t==='top')loadTop();window.scrollTo(0,0)}
+document.querySelector('nav').onclick=e=>{const b=e.target.closest('button[data-t]');if(b)show(b.dataset.t)};
+loadFeed();
+</script>
+</body>
+</html>
