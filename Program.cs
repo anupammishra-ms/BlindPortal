@@ -136,7 +136,7 @@ app.MapGet("/api/leaderboard", () =>
             Critical = g.Count(x => x.Voters.Count > criticalAfter)
         })
         .OrderByDescending(x => x.Critical).ThenByDescending(x => x.Reports).Take(20)));
-
+app.MapGet("/health", () => Results.Ok("ok"));
 app.Run();
 
 // ================= Models & Storage =================
