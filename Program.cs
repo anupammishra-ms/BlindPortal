@@ -19,8 +19,13 @@ bool devOtp = cfg.GetValue("Portal:DevShowOtp", true);
 string secret = cfg.GetValue("Portal:Secret", "secret")!;
 var leaders = cfg.GetSection("Leaders").Get<List<Leader>>() ?? new();
 var store = new Store(Path.Combine(app.Environment.ContentRootPath, "Data"), maxFile);
-var uploads = Path.Combine(app.Environment.WebRootPath ?? Path.Combine(app.Environment.ContentRootPath, "wwwroot"), "uploads");
+var uploads = Path.Combine(app.Environment.ContentRootPath, "Data", "uploads");
 Directory.CreateDirectory(uploads);
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new Microsoft.Extensions.FileProviders.PhysicalFileProvider(uploads),
+    RequestPath = "/uploads"
+});
 
 var otps = new ConcurrentDictionary<string, (string Code, DateTime Exp, int Tries)>();
 var sessions = new ConcurrentDictionary<string, Session>();
