@@ -18,6 +18,11 @@ long maxFile = cfg.GetValue("Portal:MaxFileBytes", 1073741824L);
 bool devOtp = cfg.GetValue("Portal:DevShowOtp", true);
 string secret = cfg.GetValue("Portal:Secret", "secret")!;
 var leaders = cfg.GetSection("Leaders").Get<List<Leader>>() ?? new();
+var dataDir = Path.Combine(app.Environment.ContentRootPath, "Data");
+var seed = Path.Combine(app.Environment.ContentRootPath, "SeedData", "issues-0001.json");
+Directory.CreateDirectory(dataDir);
+if (File.Exists(seed) && !Directory.GetFiles(dataDir, "issues-*.json").Any())
+    File.Copy(seed, Path.Combine(dataDir, "issues-0001.json"));
 var store = new Store(Path.Combine(app.Environment.ContentRootPath, "Data"), maxFile);
 var uploads = Path.Combine(app.Environment.ContentRootPath, "Data", "uploads");
 Directory.CreateDirectory(uploads);
